@@ -57,6 +57,18 @@ app.post("/footballers", function(req, res){
    });
 });
 
+//show
+app.get("/footballers/:id", function(req, res) {
+   //find the object with id
+   Footballer.findById(req.params.id, function(err, found){
+      if(err){
+          console.log(err);
+      } else{
+          res.render("show", {footballer: found});
+      }
+   });
+});
+
 
 //server code
 app.listen(process.env.PORT, process.env.IP, function(){
