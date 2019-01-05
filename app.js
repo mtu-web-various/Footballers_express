@@ -1,23 +1,62 @@
 //initial Setup
 var express = require("express");
 var app = express();
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 
+mongoose.connect("mongodb://localhost/footballers_app", { useNewUrlParser: true });
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
 
-//data
-var footballers = [
-        {name: "Hagi", image: "https://s1.fifaaddict.com/fo4/players/qzgvrvrj.png?20181121"},
-        {name: "Bulent", image: "http://s.weltsport.net/bilder/spieler/gross/1520.jpg"}
-    ]
+//mongo schema
+var footballerSchema = new mongoose.Schema({
+   name: String,
+   image: String,
+   description: String
+});
+
+var Footballer = mongoose.model("Footballer", footballerSchema);
+
 
 //routers
 app.get("/", function(req, res){
    res.redirect("footballers"); 
 });
 
+//index
 app.get("/footballers", function(req, res){
-   res.render("footballers", {footballers: footballers}); 
+   //get data from db
+   Footballer.find({}, function(err, fbs){
+      if(err){
+          console.log(err);
+      } else{
+          res.render("footballers", {footballers: fbs});
+      }
+   });
 });
+
+//new
+app.get("/footballers/new", function(req, res){
+    res.render("new");
+});
+
+//create
+app.post("/footballers", function(req, res){
+   //get data from form & add to the array
+   var name = req.body.name; 
+   var image = req.body.image; 
+   var description = req.body.description; 
+   var newFootballer = {name: name, image: image, description: description};
+   //create a db object
+   Footballer.create(newFootballer, function (err, newF) {
+       if(err){
+           console.log(err);
+       } else {
+           res.redirect("/footballers");
+       }
+   });
+});
+
 
 //server code
 app.listen(process.env.PORT, process.env.IP, function(){
