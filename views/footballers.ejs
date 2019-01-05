@@ -1,0 +1,25 @@
+<% include partials/header %>
+<div class="container">
+     <header class="jumbotron">
+         <div class="container">
+             <h1>Welcome To Footballers!</h1>
+             <p>Add your favorite footballers</p>
+             <p>
+                <a class="btn btn-primary btn-large" href="/footballers/new">Add New Footballer</a>
+             </p>
+         </div>
+     </header>
+     
+     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% footballers.forEach(function(footballer){ %>
+            <div class="col-md-3 col-sm-6">
+                <div class="thumbnail">
+                   <img src="<%= footballer.image %>">
+                   <div class="caption">
+                       <h4><%= footballer.name %></h4>
+                   </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
