@@ -1,0 +1,16 @@
+<% include ../partials/header %>
+<h1><%=footballer.name%></h1>
+
+<img src="<%= footballer.image %>">
+
+<p><%= footballer.description %></p>
+
+<p>
+    <a class="btn btn-success" href="/footballers/<%= footballer._id %>/comments/new">Add New Comment</a>
+</p>
+
+<% footballer.comments.forEach(function(comment){ %>
+    <p>
+        <strong><%= comment.author %></strong> - <%= comment.text %>
+    </p>
+<% }) %>
